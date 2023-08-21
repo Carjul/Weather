@@ -3,7 +3,7 @@ import { useAppDispatch} from '../data/store';
 
 
 
-import { sendData,setMessage} from '../data/features/climadta';
+import { sendData,setMessage,setOnedata} from '../data/features/climadta';
 
  type WeatherData = {
   coord: {
@@ -110,6 +110,24 @@ export const deleteData = (id: string) => (dispatch: Dispatch) => {
     .then(data => {
       console.log(data);
       dispatch(setMessage({message:"Ciudad eliminada"}));
+      }
+    )
+    .catch(error => {
+      console.log(error)
+    });
+}
+
+export const getOneData = (id: string) => (dispatch: Dispatch) => {
+  fetch(`http://localhost:3004/api/getdato/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  
+  })
+    .then(response => response.json())
+    .then(data => {
+      dispatch(setOnedata(data));
       }
     )
     .catch(error => {

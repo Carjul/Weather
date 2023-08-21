@@ -10,3 +10,4 @@ app.listen(port, () => {
 
 require('./src/db');
 const datos = require("./src/model/datos");
+const user = require("./src/model/Users");

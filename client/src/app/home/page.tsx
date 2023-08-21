@@ -1,7 +1,7 @@
 "use client";
 import { useAppDispatch, useAppSelector } from '../../data/store'
 import { sevedata } from '../../data/action'
-import { setMessage,setSort } from '../../data/features/climadta'
+import { setMessage,setSort} from '../../data/features/climadta'
 import { deleteData } from '../../data/action'
 
 import React from 'react'
@@ -13,12 +13,33 @@ import Nav from '../../components/nav'
 
 
 export default function Home() {
-    const { datos, data } = useAppSelector((state) => state.datApi)
+    const { datos, data} = useAppSelector((state) => state.datApi)
     const dispatch = useAppDispatch()
 
-    const [sort, setSorts] = React.useState("")
- 
+    const [sorts, setSorts] = React.useState({sort:""})
 
+    const [page, setPage] = React.useState(1);
+   
+    const pageSize = 6;
+
+    const totalItems =datos.length;
+
+    const startIndex = (page - 1) * pageSize;
+
+    const totalPages =Math.ceil(totalItems / pageSize);
+
+    const endIndex = Math.min(startIndex + pageSize, totalItems);
+
+    const currentData=datos.slice(startIndex, endIndex);
+     totalPages;
+    currentData;
+      const handleNextPage = () => {
+        if (page < 1) {
+          setPage(page + 1);
+        }
+   
+
+      };
     React.useEffect(() => {
         dispatch(sevedata())
     }, [])
@@ -29,14 +50,15 @@ export default function Home() {
             dispatch(sevedata())
         }
         setTimeout(() => {
-            dispatch(setMessage({ message: "" }))
+            dispatch(setMessage({ message:"" }))
         }, 5000)
     }, [dispatch, data])
     const Handlechange=(e: React.ChangeEvent<HTMLSelectElement>)=>{
-        setSorts(
-            e.target.value
-            )
-        dispatch(setSort(sort))
+        setSorts({
+            ...sorts,
+            sort:e.target.value
+           } )
+        dispatch(setSort(sorts.sort))
     }
 
     return (
@@ -51,7 +73,7 @@ export default function Home() {
                 <span>{data?.message}</span>
             </div> : null}
             <div className="flex flex-row flex-wrap mx-auto mt-6">
-                <select name="Ordenar" id="" className='select select-primary w-full max-w-xs' onChange={Handlechange} value={sort}>
+                <select name="Ordenar" id="" className='select select-primary w-full max-w-xs' onChange={Handlechange} value={sorts.sort}>
                     <option defaultValue={"Ordenar"}>Ordenar</option>
                     <option value="asc">Ascendente</option>
                     <option value="desc">Descendente</option>
@@ -59,6 +81,8 @@ export default function Home() {
             </div>
             <div className="flex flex-row flex-wrap items-center justify-start mt-10 mb-10 ml-10 mr-10">
                 {datos.length > 0 ? datos.map(e => <Card
+                    key={e?._id}
+                    id={e?._id}
                     max={e?.main?.temp_max}
                     min={e?.main?.temp_min}
                     names={e?.name}
@@ -67,17 +91,14 @@ export default function Home() {
                     main={e?.weather[0]?.main}
                     pais={e?.sys?.country}
                     onClose={() => dispatch(deleteData(e?._id))}
-                    key={e?.id}
+                    llave={e?.id}
 
                 />) : <h1 className="text-5xl font-bold mx-auto">Busca una nueva ciudad</h1>}
 
                 
             </div>
             <div className="join mx-auto mb-10">
-                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="1" checked />
-                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="2" />
-                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="3" />
-                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="4" />
+                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="1" onClick={handleNextPage}/>
                 </div>
 
         </main>

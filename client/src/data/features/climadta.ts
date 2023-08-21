@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { type } from 'os';
 
- type WeatherData = {
+
+ export type WeatherData = {
   coord: {
     lon: number;
     lat: number;
@@ -51,12 +51,14 @@ type msg = {
 interface Data {
   datos: WeatherData[];
   data:msg;
+  oneData?: WeatherData;
+
 }
 
 const initialState: Data = {
   datos: [],
-  data:{message:""}
-};
+  data:{message:""},
+}
 
 export const DatApiSlice = createSlice({
   name: 'datos del clima',
@@ -67,6 +69,9 @@ export const DatApiSlice = createSlice({
     },
     sendData: (state, action: PayloadAction<WeatherData[]>) => {
          state.datos= action.payload;
+    },
+    setOnedata: (state, action: PayloadAction<WeatherData>) => {
+      state.oneData = action.payload;
     },
     setSort: (state, action: PayloadAction<string>) => {
           state.datos.sort((a, b) => {
@@ -85,6 +90,6 @@ export const DatApiSlice = createSlice({
   }
 });
 
-export const { sendData,deleteData,setMessage,setSort } = DatApiSlice.actions;
+export const { sendData,deleteData,setMessage,setSort,setOnedata} = DatApiSlice.actions;
 
 export default DatApiSlice.reducer;
