@@ -1,6 +1,6 @@
 import ReduxProvider from '@/components/provider'
 import './globals.css'
-
+import { ClerkProvider } from '@clerk/nextjs'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -25,7 +25,7 @@ export default function RootLayout({
       </head>
 
 
-      <body className={inter.className}><ReduxProvider>{children}</ReduxProvider></body>
+      <body className={inter.className}><ClerkProvider><ReduxProvider>{children}</ReduxProvider></ClerkProvider></body>
 
 
 
