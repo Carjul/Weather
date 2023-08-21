@@ -49,4 +49,4 @@ const datosSchema = new Schema(
 
 );
 
-export default models.datos || model('datos', datosSchema)
+export default models.Datos || model('Datos', datosSchema)

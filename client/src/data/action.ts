@@ -53,11 +53,12 @@ import { sendData,setMessage,setOnedata} from '../data/features/climadta';
 export const getApiClima = (Nombre: string) =>async (dispatch: Dispatch) => {
   
 
-   fetch(`http://localhost:3004/api/sevedatos?Nombre=${Nombre}`,{
+   fetch(`/api/datos`,{
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({ Nombre: Nombre }),
     })
     .then(response => response.json())
     .then(data => {
@@ -77,7 +78,7 @@ export const getApiClima = (Nombre: string) =>async (dispatch: Dispatch) => {
  
 export const sevedata = () => (dispatch: Dispatch) => {
   var datos:WeatherData[]
-  fetch('http://localhost:3004/api/getdatos', {
+  fetch('/api/datos', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ export const sevedata = () => (dispatch: Dispatch) => {
 }
 
 export const deleteData = (id: string) => (dispatch: Dispatch) => {
-  fetch(`http://localhost:3004/api/deletedato/${id}`, {
+  fetch(`/api/datos/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -118,7 +119,7 @@ export const deleteData = (id: string) => (dispatch: Dispatch) => {
 }
 
 export const getOneData = (id: string) => (dispatch: Dispatch) => {
-  fetch(`http://localhost:3004/api/getdato/${id}`, {
+  fetch(`/api/datos/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

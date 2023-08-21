@@ -1,4 +1,4 @@
-const { connect, connection } = require("mongoose");
+import { connect, connection } from "mongoose";
 
 const { URI } = process.env;
 

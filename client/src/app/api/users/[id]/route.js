@@ -1,14 +1,18 @@
 import {NextResponse } from 'next/server'
+import {Conectdb} from '@/utils/moongose'
+import Users from '@/model/Users' 
 
-export function GET(resquest,{params}){
+Conectdb() 
+
+export async function GET(request,{params}){
     const {id} =params
-    return NextResponse.json({
-        message:"obteniendo un user."
-    })
+    const dato = await Users.findById(id);
+    return NextResponse.json(dato)
 }
 
-export function DELETE(resquest,{params}){
+export async function DELETE(request,{params}){
     const {id} =params
+    await Users.findByIdAndDelete(id);
     return NextResponse.json({
         message:"eliminando user."
     })

@@ -1,17 +1,20 @@
 import {NextResponse } from 'next/server'
+import {Conectdb} from '@/utils/moongose'
+import Datos from '@/model/Datos' 
 
-export function GET(resquest,{params}){
+
+Conectdb()
+
+export async function GET(request,{params}){
     const {id} =params
-    console.log(id)
-    return NextResponse.json({
-        message:"obteniendo una tarea."
-    })
+    const dato = await Datos.findById(id);
+    return NextResponse.json(dato)
 }
 
-export function DELETE(resquest,{params}){
+export async function DELETE(request,{params}){
     const {id} = params
-    console.log(id)
+    await Datos.findByIdAndDelete(id);
     return NextResponse.json({
-        message:"eliminando tarea."
+        message:"eliminado."
     })
 }
