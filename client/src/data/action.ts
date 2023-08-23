@@ -1,56 +1,35 @@
 import { Dispatch } from 'redux';
-import { useAppDispatch} from '../data/store';
+import { sendData,setMessage,setOnedata,WeatherData,User,setuser} from '../data/features/climadta';
+
+ 
+
+export const postUser = (user:User) => (dispatch: Dispatch) => {
+
+  fetch(`/api/users`,{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+    })
+    .then(response => response.json())
+    .then(data => {
+      dispatch(setuser(data));
+       
+      }
+      )
+      .catch(error => {
+        // Manejar errores
+        dispatch(setMessage({message:"Usuario no creado"}));
+        console.log(error)
+      });
+      
+
+}
 
 
 
-import { sendData,setMessage,setOnedata} from '../data/features/climadta';
-
- type WeatherData = {
-  coord: {
-    lon: number;
-    lat: number;
-  };
-  weather: {
-    id: number;
-    main: string;
-    description: string;
-    icon: string;
-  }[];
-  base: string;
-  main: {
-    temp: number;
-    feels_like: number;
-    temp_min: number;
-    temp_max: number;
-    pressure: number;
-    humidity: number;
-    sea_level: number;
-    grnd_level: number;
-  };
-  visibility: number;
-  wind: {
-    speed: number;
-    deg: number;
-    gust: number;
-  };
-  clouds: {
-    all: number;
-  };
-  dt: number;
-  sys: {
-    country: string;
-    sunrise: number;
-    sunset: number;
-  };
-  _id: string;
-  timezone: number;
-  id: number;
-  name: string;
-  cod: number;
-};
-
-
-export const getApiClima = (Nombre: string) =>async (dispatch: Dispatch) => {
+export const getApiClima = (Nombre: string,_id:string) =>async (dispatch: Dispatch) => {
   
 
    fetch(`/api/datos`,{
@@ -58,7 +37,7 @@ export const getApiClima = (Nombre: string) =>async (dispatch: Dispatch) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ Nombre: Nombre }),
+    body: JSON.stringify({ Nombre: Nombre,_id:_id }),
     })
     .then(response => response.json())
     .then(data => {
@@ -76,13 +55,14 @@ export const getApiClima = (Nombre: string) =>async (dispatch: Dispatch) => {
       
     }
  
-export const sevedata = () => (dispatch: Dispatch) => {
+export const sevedata = (_id:string) => (dispatch: Dispatch) => {
   var datos:WeatherData[]
   fetch('/api/datos', {
-    method: 'GET',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({UserId: _id }),
     
   })
     .then(response => response.json())

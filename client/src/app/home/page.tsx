@@ -1,21 +1,24 @@
 "use client";
 import { useAppDispatch, useAppSelector } from '../../data/store'
-import { sevedata } from '../../data/action'
+import { sevedata, deleteData} from '../../data/action'
 import { setMessage,setSort} from '../../data/features/climadta'
-import { deleteData } from '../../data/action'
+import {redirect} from 'next/navigation' 
 
 import React from 'react'
 
 import Card from '../../components/card'
 import Nav from '../../components/nav'
 
-
-
-
 export default function Home() {
-    const { datos, data} = useAppSelector((state) => state.datApi)
+   
+    const { datos, data, User} = useAppSelector((state) => state.datApi)
     const dispatch = useAppDispatch()
+    React.useEffect(() => {
 
+    if(User===undefined){
+        redirect('/')
+      }
+ }, [User])
     const [sorts, setSorts] = React.useState({sort:""})
 
     const [page, setPage] = React.useState(1);
@@ -41,13 +44,13 @@ export default function Home() {
 
       };
     React.useEffect(() => {
-        dispatch(sevedata())
+        dispatch(sevedata(User?._id||""))
     }, [])
  
 
     React.useEffect(() => {
         if (data?.message === "Ciudad encontrada" || data?.message === "Ciudad eliminada") {
-            dispatch(sevedata())
+            dispatch(sevedata(User?._id|| ""))
         }
         setTimeout(() => {
             dispatch(setMessage({ message:"" }))

@@ -44,7 +44,10 @@ const datosSchema = new Schema(
         timezone: Number,
         id: Number,
         name: String,
-        cod: Number
+        cod: Number,
+        userId:{
+            type: Schema.Types.ObjectId,
+        }
     } 
 
 );

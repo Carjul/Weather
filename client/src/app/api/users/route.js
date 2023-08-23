@@ -11,8 +11,12 @@ export async function GET() {
 
 export async function POST(request) {
     const user = await request.json()
-    await Users.create(user)
-    return NextResponse.json({
-        message: "user creado"
-    })
+    const existe = await Users.findOne({email: user.email})
+    if(existe){
+        console.log('el usuario existe')
+        return NextResponse.json( existe)
+    }else{
+    const x = await Users.create(user);
+        return NextResponse.json(x)
+    }
 }

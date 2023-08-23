@@ -1,19 +1,47 @@
+"use client"
 import Link from "next/link";
 import imagen from '../../public/icono2.ico'
 import Image from "next/image";
 
+import { useUser } from '@clerk/nextjs'
+import { useEffect } from "react";
+import { postUser } from '@/data/action'
+import { useAppDispatch, useAppSelector } from "@/data/store";
+
+
 export default function Landing() {
+  const { user } = useUser()
+  const { User } = useAppSelector(state => state.datApi)
+
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    if (user && !User) {
+      dispatch(postUser({
+        nombre: user?.firstName || '',
+        apellido: user?.lastName || '',
+        email: user?.emailAddresses[0].emailAddress || '',
+        password: user?.fullName || ''
+      }))
+    }
+
+
+  }, [user, User])
   return (
     <>
       <div className="hero min-h-screen" id="screm">
         <div className="hero-content text-center">
           <div className="max-w-md">
-           <div className="flex flex-row">
-           <h1 className="flex flex-row w-full  text-5xl font-bold">Weather App </h1>
-            <figure  className="px-auto"><Image className="mx-auto" src={imagen} alt="no img" /></figure>
-           </div>
-            <p className="py-6"> Aplicación del clima, sencilla y practica </p>
-            <Link href={"/home"} className="btn btn-primary">Launch</Link>
+            <div className="flex flex-row">
+              <h1 className="flex flex-row w-full text-secondary-content text-5xl font-bold">Weather App </h1>
+              <figure className="px-auto"><Image className="mx-auto" src={imagen} alt="no img" /></figure>
+            </div>
+            <p className="py-6 text-secondary-content"> Aplicación del clima, sencilla y practica </p>
+            {!User && user ? <button className="btn btn-primary">
+              <span className="loading loading-spinner"></span>
+            </button> : null}
+            {user && User ? <Link href={"/home"} className="btn btn-primary">Launch</Link> : null}
+            {!user ? <Link href={"/sign-in"} className="btn btn-primary">sign-in</Link> : null}
+
           </div>
         </div>
       </div>
