@@ -1,69 +1,57 @@
 "use client";
 import { useAppDispatch, useAppSelector } from '../../data/store'
-import { sevedata, deleteData} from '../../data/action'
-import { setMessage,setSort} from '../../data/features/climadta'
-import {redirect} from 'next/navigation' 
-
+import { sevedata, deleteData } from '../../data/action'
+import { setMessage, setSort } from '../../data/features/climadta'
+import { redirect } from 'next/navigation'
 import React from 'react'
-
 import Card from '../../components/card'
 import Nav from '../../components/nav'
 
 export default function Home() {
-   
-    const { datos, data, User} = useAppSelector((state) => state.datApi)
+
+    const { datos, data, User } = useAppSelector((state) => state.datApi)
     const dispatch = useAppDispatch()
     React.useEffect(() => {
 
-    if(User===undefined){
-        redirect('/')
-      }
- }, [User])
-    const [sorts, setSorts] = React.useState({sort:""})
-
-    const [page, setPage] = React.useState(1);
-   
-    const pageSize = 6;
-
-    const totalItems =datos.length;
-
-    const startIndex = (page - 1) * pageSize;
-
-    const totalPages =Math.ceil(totalItems / pageSize);
-
-    const endIndex = Math.min(startIndex + pageSize, totalItems);
-
-    const currentData=datos.slice(startIndex, endIndex);
-     totalPages;
-    currentData;
-      const handleNextPage = () => {
-        if (page < 1) {
-          setPage(page + 1);
+        if (User === undefined) {
+            redirect('/')
         }
-   
+    }, [User])
+    const [sorts, setSorts] = React.useState({ sort: "" })
 
-      };
+
     React.useEffect(() => {
-        dispatch(sevedata(User?._id||""))
-    }, [])
- 
+        dispatch(sevedata(User?._id || ""))
+    }, [dispatch, User])
+
 
     React.useEffect(() => {
         if (data?.message === "Ciudad encontrada" || data?.message === "Ciudad eliminada") {
-            dispatch(sevedata(User?._id|| ""))
+            dispatch(sevedata(User?._id || ""))
         }
         setTimeout(() => {
-            dispatch(setMessage({ message:"" }))
+            dispatch(setMessage({ message: "" }))
         }, 5000)
     }, [dispatch, data])
-    const Handlechange=(e: React.ChangeEvent<HTMLSelectElement>)=>{
+
+    const Handlechange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSorts({
             ...sorts,
-            sort:e.target.value
-           } )
+            sort: e.target.value
+        })
         dispatch(setSort(sorts.sort))
-    }
 
+    }
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const itemsPerPage = 3;
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = datos?.slice(indexOfFirstItem, indexOfLastItem);
+
+ 
+    const paginate = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
     return (
         <main className="flex flex-col">
             <Nav />
@@ -83,7 +71,7 @@ export default function Home() {
                 </select>
             </div>
             <div className="flex flex-row flex-wrap items-center justify-start mt-10 mb-10 ml-10 mr-10">
-                {datos.length > 0 ? datos.map(e => <Card
+                { currentItems?.length > 0 ? currentItems?.map(e => <Card
                     key={e?._id}
                     id={e?._id}
                     max={e?.main?.temp_max}
@@ -98,11 +86,14 @@ export default function Home() {
 
                 />) : <h1 className="text-5xl font-bold mx-auto">Busca una nueva ciudad</h1>}
 
-                
+
             </div>
             <div className="join mx-auto mb-10">
-                    <input className="join-item btn btn-square" type="radio" name="options" aria-label="1" onClick={handleNextPage}/>
-                </div>
+           
+                {Array.from({ length: Math.ceil(datos?.length / itemsPerPage) }).map((_, index) => (
+              <input className="join-item btn btn-square" type="radio" name="options" key={index} onClick={() => paginate(index + 1)} aria-label={`${index +1}`}/>
+                ))}
+            </div>
 
         </main>
     )
