@@ -53,7 +53,7 @@ export type User =   {
     nombre: String,
     apellido: String,
     email: String,
-    password: String,
+    password: String
   }
 
 
@@ -61,13 +61,21 @@ interface Data {
   datos: WeatherData[];
   data:msg;
   oneData?: WeatherData;
-  User?:User
-
+  User:User;
+  isLoading: boolean
 }
 
 const initialState: Data = {
   datos: [],
   data:{message:""},
+  User:{
+    nombre: "",
+    apellido: "",
+    email: "",
+    password: "",
+  },
+  isLoading: false
+
 }
 
 export const DatApiSlice = createSlice({
@@ -102,10 +110,16 @@ export const DatApiSlice = createSlice({
     },
     deleteData: (state, action: PayloadAction<number>) => {
         state.datos = state.datos.filter((item, index) => item.id !== action.payload);
+    },
+    updateUserLoading: (state, action: PayloadAction<boolean>) => {
+      if (state.User) {
+        state.isLoading = action.payload;
+      }
     }
+  
   }
 });
 
-export const { sendData,deleteData,setMessage,setSort,setOnedata,setuser,clenData} = DatApiSlice.actions;
+export const { sendData,deleteData,setMessage,setSort,setOnedata,setuser,clenData,updateUserLoading} = DatApiSlice.actions;
 
 export default DatApiSlice.reducer;

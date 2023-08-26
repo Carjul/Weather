@@ -4,7 +4,7 @@ import imagen from '../../public/icono2.ico'
 import foto from '../../public/foto.jpg'
 import Image from "next/image";
 import { useUser } from '@clerk/nextjs'
-import { useEffect } from "react";
+import { useEffect , useState} from "react";
 import { postUser } from '@/data/action'
 import { useAppDispatch, useAppSelector } from "@/data/store";
 
@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "@/data/store";
 export default function Landing() {
   const { user } = useUser()
   const { User } = useAppSelector(state => state.datApi)
+
 
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -22,10 +23,13 @@ export default function Landing() {
         email: user?.emailAddresses[0].emailAddress || '',
         password: user?.fullName || ''
       }))
+   
     }
-
-
+   
   }, [user, User, dispatch])
+
+
+
   return (
     <>
       <div className="hero min-h-screen" >
@@ -37,9 +41,10 @@ export default function Landing() {
               <figure className="px-auto"><Image className="mx-auto" src={imagen} alt="no img" /></figure>
             </div>
             <p className="py-6 text-secondary-content"> Aplicación del clima, sencilla y practica </p>
-            {!User && user ? <button className="btn btn-primary"><span className="loading loading-spinner"></span> </button> : null}
+            {!User && user? <button className="btn btn-primary">
+              <span className="loading loading-spinner"></span> </button> : null}
             {user && User ? <Link href={"/home"} className="btn btn-primary">Launch</Link> : null}
-            {!user? <Link href={"/sign-in"} className="btn btn-primary">sign-in</Link> : null}
+            {!user? <Link href={"/sign-in"} className="btn btn-primary" >sign-in</Link> : null}
 
           </div>
         </div>
