@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { type } from 'os';
 
 
  export type WeatherData = {
@@ -82,7 +81,10 @@ export const DatApiSlice = createSlice({
       state.User = action.payload;
     },
     sendData: (state, action: PayloadAction<WeatherData[]>) => {
-         state.datos= action.payload;
+         state.datos= action.payload.reverse();
+    },
+    clenData: (state) => {
+      state.oneData= undefined;
     },
     setOnedata: (state, action: PayloadAction<WeatherData>) => {
       state.oneData = action.payload;
@@ -104,6 +106,6 @@ export const DatApiSlice = createSlice({
   }
 });
 
-export const { sendData,deleteData,setMessage,setSort,setOnedata,setuser} = DatApiSlice.actions;
+export const { sendData,deleteData,setMessage,setSort,setOnedata,setuser,clenData} = DatApiSlice.actions;
 
 export default DatApiSlice.reducer;

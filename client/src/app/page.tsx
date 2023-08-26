@@ -1,8 +1,8 @@
 "use client"
 import Link from "next/link";
 import imagen from '../../public/icono2.ico'
+import foto from '../../public/foto.jpg'
 import Image from "next/image";
-
 import { useUser } from '@clerk/nextjs'
 import { useEffect } from "react";
 import { postUser } from '@/data/action'
@@ -25,10 +25,11 @@ export default function Landing() {
     }
 
 
-  }, [user, User])
+  }, [user, User, dispatch])
   return (
     <>
-      <div className="hero min-h-screen" id="screm">
+      <div className="hero min-h-screen" >
+      <Image src={foto} alt="logo"  priority={true} fill/>
         <div className="hero-content text-center">
           <div className="max-w-md">
             <div className="flex flex-row">

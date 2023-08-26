@@ -32,7 +32,7 @@ export default function Home() {
         setTimeout(() => {
             dispatch(setMessage({ message: "" }))
         }, 5000)
-    }, [dispatch, data])
+    }, [dispatch, data, User])
 
     const Handlechange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSorts({

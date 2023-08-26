@@ -1,22 +1,48 @@
-import { connect, connection } from "mongoose";
+import { MongoClient } from 'mongodb';
 
 const { URI } = process.env;
 
-const conn = {
-    isConected: false,
+let db = null;
+
+async function connectToDatabase() {
+    if (db) {
+        return db;
+    }
+
+    const client = new MongoClient(URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+
+    try {
+        await client.connect();
+        console.log('MongoDB connected');
+        db = client.db();
+        return db;
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        throw error;
+    }
 }
 
-connection.on('connected', () => {
-    console.log(`mongoose is connected`)
-})
 
-connection.on('error', (err) => {
-    console.log("mongoose conection error:", err)
-})
-
-export async function Conectdb() {
-    if (conn.isConected) return;
-    const db = await connect(URI)
-    conn.isConected = db.connections[0].readyState
+export async function getDatosModel() {
+    try {
+        const database = await connectToDatabase();
+        const datosCollection = database.collection('Datos');
+        return datosCollection;
+    } catch (error) {
+        throw error;
+    }
 }
 
+export async function getUserModel() {
+    try {
+        const database = await connectToDatabase();
+        const userCollection = database.collection('Users');
+        return userCollection;
+    } catch (error) {
+        throw error;
+    }
+}
+ 
