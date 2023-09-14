@@ -18,10 +18,10 @@ export default function Landing() {
   useEffect(() => {
     if (user && !User) {
       dispatch(postUser({
-        nombre: user?.firstName || '',
-        apellido: user?.lastName || '',
-        email: user?.emailAddresses[0].emailAddress || '',
-        password: user?.fullName || ''
+        nombre: user.firstName || '',
+        apellido: user.lastName || '',
+        email: user.emailAddresses[0].emailAddress || '',
+        password: user.fullName || ''
       }))
    
     }
