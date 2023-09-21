@@ -17,7 +17,7 @@ export default function Vista() {
         <div className="flex flex-col">
             <Nav />
             <div className="card w-3/5 glass mx-auto mt-10 z-10 bg-base-300">
-                <figure><Image src={`http://openweathermap.org/img/wn/${oneData?.weather[0].icon}@2x.png`} width={200} height={190} alt="Shoes" /></figure>
+                <figure><Image src={`http://openweathermap.org/img/wn/${oneData?.weather[0].icon}@2x.png`} width={200} height={190} priority={true} alt="Shoes" /></figure>
                 <div className="card-body">
                     <h2 className="card-title">Weather Information for {oneData?.name}</h2>
                     <p className='p-2'>Latitude: {oneData?.coord.lat}</p>

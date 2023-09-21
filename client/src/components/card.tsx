@@ -16,7 +16,7 @@ export default function Card({ id, max, min, names, img, desc, main, llave, onCl
             <button className="btn btn-error w-10 mt-1 ml-2 hover:bg-base-300" onClick={() => onClose()}>X</button>
             <div className="card-body" onClick={click}>
 
-            <figure><Image src={`http://openweathermap.org/img/wn/${img}@2x.png`} width={200} height={190} alt="Shoes" /></figure>
+            <figure><Image src={`http://openweathermap.org/img/wn/${img}@2x.png`} width={200} height={190} priority={true} alt="Shoes" /></figure>
 
                 <h2 className="card-title">
                     {names}

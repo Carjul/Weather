@@ -15,18 +15,19 @@ export default function Landing() {
 
 
   const dispatch = useAppDispatch()
+
   useEffect(() => {
-    if (user && !User) {
-      dispatch(postUser({
+     if (!User._id && user) {
+    dispatch(postUser({
         nombre: user.firstName || '',
         apellido: user.lastName || '',
         email: user.emailAddresses[0].emailAddress || '',
         password: user.fullName || ''
-      }))
-   
+      })) 
+ 
     }
-   
-  }, [user, User, dispatch])
+      
+  }, [user,User,dispatch])
 
 
 
@@ -43,7 +44,7 @@ export default function Landing() {
             <p className="py-6 text-secondary-content"> Aplicación del clima, sencilla y practica </p>
             {!User && user? <button className="btn btn-primary">
               <span className="loading loading-spinner"></span> </button> : null}
-            {user && User ? <Link href={"/home"} className="btn btn-primary">Launch</Link> : null}
+            {User && user ? <Link href={"/home"} className="btn btn-primary">Launch</Link> : null}
             {!user? <Link href={"/sign-in"} className="btn btn-primary" >sign-in</Link> : null}
 
           </div>

@@ -67,7 +67,6 @@ export const sevedata = (_id:string) => (dispatch: Dispatch) => {
   })
     .then(response => response.json())
     .then(data => {
-
       datos = JSON.parse(JSON.stringify(data))
       dispatch(sendData(datos))
     }
@@ -89,7 +88,6 @@ export const deleteData = (id: string) => (dispatch: Dispatch) => {
   })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       dispatch(setMessage({message:"Ciudad eliminada"}));
       }
     )

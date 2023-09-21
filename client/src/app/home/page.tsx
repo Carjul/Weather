@@ -21,13 +21,17 @@ export default function Home() {
 
 
     React.useEffect(() => {
-        dispatch(sevedata(User?._id || ""))
+        if(User._id){
+            dispatch(sevedata(User?._id))
+        }
     }, [dispatch, User])
 
 
     React.useEffect(() => {
         if (data?.message === "Ciudad encontrada" || data?.message === "Ciudad eliminada") {
-            dispatch(sevedata(User?._id || ""))
+            if(User._id){
+                dispatch(sevedata(User._id))
+            }
         } 
         setTimeout(() => {
             dispatch(setMessage({ message: "" }))
