@@ -28,7 +28,7 @@ export default function Home() {
     React.useEffect(() => {
         if (data?.message === "Ciudad encontrada" || data?.message === "Ciudad eliminada") {
             dispatch(sevedata(User?._id || ""))
-        }
+        } 
         setTimeout(() => {
             dispatch(setMessage({ message: "" }))
         }, 5000)
