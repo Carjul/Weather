@@ -98,15 +98,11 @@ export const DatApiSlice = createSlice({
       state.oneData = action.payload;
     },
     setSort: (state, action: PayloadAction<string>) => {
-          state.datos.sort((a, b) => {
-            if (a.name > b.name) {
-              return action.payload === 'asc' ? 1 : -1;
-            }
-            if (a.name < b.name) {
-              return action.payload === 'desc' ? -1 : 1;
-            }
-            return 0;
-          })
+      if (action.payload === "asc") {
+        state.datos = state.datos.sort((a, b) => a.main.temp - b.main.temp);
+      } else {
+        state.datos = state.datos.sort((a, b) => b.main.temp - a.main.temp);
+      }
     },
     deleteData: (state, action: PayloadAction<number>) => {
         state.datos = state.datos.filter((item, index) => item.id !== action.payload);

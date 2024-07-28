@@ -31,7 +31,7 @@ export const postUser = (user:User) => (dispatch: Dispatch) => {
 
 export const getApiClima = (Nombre: string,_id:string) =>async (dispatch: Dispatch) => {
   
-
+console.log(Nombre)
    fetch(`/api/datos`,{
     method: 'POST',
     headers: {

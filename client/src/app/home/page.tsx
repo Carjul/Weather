@@ -16,15 +16,12 @@ export default function Home() {
         if (User === undefined) {
             redirect('/')
         }
-    }, [User])
-    const [sorts, setSorts] = React.useState({ sort: "" })
-
-
-    React.useEffect(() => {
-        if(User._id){
+        else if (User._id) {
             dispatch(sevedata(User?._id))
         }
     }, [dispatch, User])
+
+    const [sorts, setSorts] = React.useState({ sort: "" })
 
 
     React.useEffect(() => {
