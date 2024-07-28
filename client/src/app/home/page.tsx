@@ -71,7 +71,7 @@ export default function Home() {
                     <option value="desc">Descendente</option>
                 </select>
             </div>
-            <div className="flex flex-row flex-wrap items-center justify-start mt-10 mb-10 ml-5 mr-5">
+            <div className="flex flex-row flex-wrap items-center justify-start mt-10 mb-10 ml-10 mr-10">
                 { currentItems?.length > 0 ? currentItems?.map(e => <Card
                     key={e?._id}
                     id={e?._id}
