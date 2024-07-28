@@ -1,28 +1,34 @@
-import { NextResponse } from 'next/server'
-import { getUserModel } from '@/utils/moongose'
-
-
+import { NextResponse } from 'next/server';
+import { getUserModel } from '@/utils/moongose';
 
 export async function GET() {
-    const data = await getUserModel()
-    const cursor= data.find({})
-    const results = await cursor.toArray()
-    return NextResponse.json(results)
+  try {
+    const data = await getUserModel();
+    const cursor = data.find({});
+    const results = await cursor.toArray();
+    return NextResponse.json(results);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return NextResponse.json({ error: 'Error fetching users' }, { status: 500 });
+  }
 }
 
 export async function POST(request) {
-    const user = await request.json()
+  try {
+    const user = await request.json();
     const userCollection = await getUserModel();
-     const cursor= userCollection.find({email:user.email}) 
-     const results = await cursor.toArray();
+    const cursor = userCollection.find({ email: user.email });
+    const results = await cursor.toArray();
 
-    if(results.length>0){
-        console.log('el usuario existe')
-        return NextResponse.json(results[0])
+    if (results.length > 0) {
+      console.log('El usuario existe');
+      return NextResponse.json(results[0]);
+    } else {
+      const result = await userCollection.insertOne(user);
+      return NextResponse.json(result.ops[0]); // `ops` contiene los documentos insertados
     }
-    else{
-        const userCollection = await getUserModel();
-        const result = await userCollection.insertOne(user);
-        return NextResponse.json(result)
-    } 
+  } catch (error) {
+    console.error('Error processing POST request:', error);
+    return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
+  }
 }

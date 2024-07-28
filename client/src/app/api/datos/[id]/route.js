@@ -1,5 +1,5 @@
-import {NextResponse } from 'next/server'
-import { getDatosModel } from '@/utils/moongose'
+import { NextResponse } from 'next/server';
+import { getDatosModel } from '@/utils/moongose';
 import { ObjectId } from 'mongodb';
 
 export async function GET(request, { params }) {
@@ -8,21 +8,20 @@ export async function GET(request, { params }) {
     const datosCollection = await getDatosModel();
 
     try {
-        const results = await datosCollection.findOne({"_id":objectId})
+        const result = await datosCollection.findOne({ "_id": objectId });
 
-        if (results.hasOwnProperty("_id")) {
-            return NextResponse.json(results);
-        }else{
+        if (result) {
+            return NextResponse.json(result);
+        } else {
             return NextResponse.json({
-                message2: "No se encontró ningún dato con ese ID."
-            });
+                message: "No se encontró ningún dato con ese ID."
+            }, { status: 404 });
         }
     } catch (error) {
         console.error('Error al buscar el dato:', error);
-        return NextResponse.error({
-            status: 500,
-            message2: "Hubo un error al buscar el dato."
-        });
+        return NextResponse.json({
+            message: "Hubo un error al buscar el dato."
+        }, { status: 500 });
     }
 }
 
@@ -32,22 +31,21 @@ export async function DELETE(request, { params }) {
     const datosCollection = await getDatosModel();
 
     try {
-        const result = await datosCollection.deleteOne({"_id":objectId});
+        const result = await datosCollection.deleteOne({ "_id": objectId });
 
         if (result.deletedCount === 1) {
             return NextResponse.json({
-                message1: "Documento eliminado correctamente."
+                message: "Documento eliminado correctamente."
             });
         } else {
             return NextResponse.json({
-                message2: "No se encontró ningún documento con ese ID."
-            });
+                message: "No se encontró ningún documento con ese ID."
+            }, { status: 404 });
         }
     } catch (error) {
         console.error('Error al eliminar el documento:', error);
-        return NextResponse.error({
-            status: 500,
-            message2: "Hubo un error al eliminar el documento."
-        });
+        return NextResponse.json({
+            message: "Hubo un error al eliminar el documento."
+        }, { status: 500 });
     }
 }

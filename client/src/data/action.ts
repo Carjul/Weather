@@ -1,82 +1,76 @@
 import { Dispatch } from 'redux';
-import { sendData,setMessage,setOnedata,WeatherData,User,setuser} from '../data/features/climadta';
+import { sendData, setMessage, setOnedata, WeatherData, User, setuser } from '../data/features/climadta';
 
- 
-
-export const postUser = (user:User) => (dispatch: Dispatch) => {
-
-  fetch(`/api/users`,{
+export const postUser = (user: User) => (dispatch: Dispatch) => {
+  fetch(`/api/users`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
     })
-    .then(response => response.json())
     .then(data => {
       dispatch(setuser(data));
-       
-      }
-      )
-      .catch(error => {
-        // Manejar errores
-        dispatch(setMessage({message:"Usuario no creado"}));
-        console.log(error)
-      });
-      
+    })
+    .catch(error => {
+      dispatch(setMessage({ message: "Usuario no creado" }));
+      console.log(error);
+    });
+};
 
-}
-
-
-
-export const getApiClima = (Nombre: string,_id:string) =>async (dispatch: Dispatch) => {
-  
-console.log(Nombre)
-   fetch(`/api/datos`,{
+export const getApiClima = (Nombre: string, _id: string) => async (dispatch: Dispatch) => {
+  fetch(`/api/datos`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ Nombre: Nombre,_id:_id }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      dispatch(setMessage({message:"Ciudad encontrada"}));
-      console.log('Success:', data);
+    body: JSON.stringify({ Nombre, _id }),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-      )
-      .catch(error => {
-        // Manejar errores
-        dispatch(setMessage({message:"Ciudad no encontrada"}));
-        console.log(error)
-      });
-      
-      
-      
-    }
- 
-export const sevedata = (_id:string) => (dispatch: Dispatch) => {
-  var datos:WeatherData[]
+      return response.json();
+    })
+    .then(data => {
+      dispatch(setMessage({ message: "Ciudad encontrada" }));
+      console.log('Success:', data);
+    })
+    .catch(error => {
+      dispatch(setMessage({ message: "Ciudad no encontrada" }));
+      console.log(error);
+    });
+};
+
+export const sevedata = (_id: string) => (dispatch: Dispatch) => {
   fetch('/api/datos', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({UserId: _id }),
-    
+    body: JSON.stringify({ UserId: _id }),
   })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then(data => {
-      datos = JSON.parse(JSON.stringify(data))
-      dispatch(sendData(datos))
-    }
-    )
+      const datos: WeatherData[] = JSON.parse(JSON.stringify(data));
+      dispatch(sendData(datos));
+    })
     .catch(error => {
-      // Manejar errores
-      dispatch(setMessage({message:"Ciudad no encontrada"}));
-      console.log(error)
+      dispatch(setMessage({ message: "Ciudad no encontrada" }));
+      console.log(error);
     });
-}
+};
 
 export const deleteData = (id: string) => (dispatch: Dispatch) => {
   fetch(`/api/datos/${id}`, {
@@ -84,17 +78,20 @@ export const deleteData = (id: string) => (dispatch: Dispatch) => {
     headers: {
       'Content-Type': 'application/json',
     },
-  
   })
-    .then(response => response.json())
-    .then(data => {
-      dispatch(setMessage({message:"Ciudad eliminada"}));
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    )
+      return response.json();
+    })
+    .then(data => {
+      dispatch(setMessage({ message: "Ciudad eliminada" }));
+    })
     .catch(error => {
-      console.log(error)
+      console.log(error);
     });
-}
+};
 
 export const getOneData = (id: string) => (dispatch: Dispatch) => {
   fetch(`/api/datos/${id}`, {
@@ -102,14 +99,17 @@ export const getOneData = (id: string) => (dispatch: Dispatch) => {
     headers: {
       'Content-Type': 'application/json',
     },
-  
   })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then(data => {
       dispatch(setOnedata(data));
-      }
-    )
+    })
     .catch(error => {
-      console.log(error)
+      console.log(error);
     });
-}
+};

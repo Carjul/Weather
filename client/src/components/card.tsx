@@ -11,7 +11,7 @@ export default function Card({ id, max, min, names, img, desc, main, llave, onCl
         dispatch(getOneData(id))
     }
     return (
-        <div className="card w-96 bg-base-300 shadow-xl mt-10 mb-10 ml-10 mr-10 z-0" key={llave} >
+        <div className="card w-96 bg-base-300 shadow-xl mt-5 mb-5 ml-5 mr-5 z-0" key={llave} >
 
             <button className="btn btn-error w-10 mt-1 ml-2 hover:bg-base-300" onClick={() => onClose()}>X</button>
             <div className="card-body" onClick={click}>

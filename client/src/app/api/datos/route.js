@@ -1,36 +1,37 @@
-import { NextResponse } from 'next/server'
-import { getDatosModel } from '@/utils/moongose'
+import { NextResponse } from 'next/server';
+import { getDatosModel } from '@/utils/moongose';
 
 export async function PUT(request) {
-  const { UserId } = await request.json();
-  const datosCollection = await getDatosModel();
-  const cursor = datosCollection.find({ userId: UserId })
-  const results = await cursor.toArray();
-  return NextResponse.json(results)
+  try {
+    const { UserId } = await request.json();
+    const datosCollection = await getDatosModel();
+    const results = await datosCollection.find({ userId: UserId }).toArray();
+    return NextResponse.json(results);
+  } catch (error) {
+    return NextResponse.json({ error: 'Error procesando la solicitud' }, { status: 500 });
+  }
 }
 
 export async function POST(request) {
-  var datos1 = [];
-  const { Nombre, _id } = await request.json();
-  const datosCollection = await getDatosModel();
-  await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${Nombre}&appid=4ae2636d8dfbdc3044bede63951a019b&units=metric`)
-    .then(response => response.json())
-    .then(data => {
-
-      datos1.push(JSON.parse(JSON.stringify({ ...data, userId: _id })))
+  try {
+    const { Nombre, _id } = await request.json();
+    const datosCollection = await getDatosModel();
+    const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${Nombre}&appid=4ae2636d8dfbdc3044bede63951a019b&units=metric`);
+    
+    if (!response.ok) {
+      return NextResponse.json({ message: 'Error fetching weather data' }, { status: response.status });
     }
-    )
-    if(datos1[0].message==="city not found"){
-      return NextResponse.json({
-        message2: "Ciudad no encontrada"
-      })
-    }else{
+
+    const data = await response.json();
+    const datos1 = [ { ...data, userId: _id } ];
+
+    if (datos1[0].message === "city not found") {
+      return NextResponse.json({ message: "Ciudad no encontrada" }, { status: 404 });
+    } else {
       await datosCollection.insertMany(datos1);
-      return NextResponse.json({
-        message1: "Dato creado"
-      })
+      return NextResponse.json({ message: "Dato creado" });
     }
-
-  
-
+  } catch (error) {
+    return NextResponse.json({ error: 'Error procesando la solicitud' }, { status: 500 });
+  }
 }
